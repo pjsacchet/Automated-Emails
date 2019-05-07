@@ -5,8 +5,8 @@
 import smtplib
 
 from string import Template
-from email.mine.multipart import MIMEMultipart
-from email.mine.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 MY_ADDRESS = None
 PASSWORD = None
@@ -24,7 +24,6 @@ def get_contacts(filename):
             emails.append(contact.split()[1])
     return names, emails
 
-
 # Function will read contents of the file and create a Template object out of it
 # @param - filename - Name of file with the template for our message
 # @return - Template object
@@ -33,15 +32,27 @@ def read_template(filename):
         template_file_content = template_file.read()
     return Template(template_file_content)
 
-
-
-
-
 def main():
-
-
-
-
+    # Grab the template, names and emails
+    names, emails = get_contacts('teammembers.txt')
+    message_template = read_template('messagetemplate.txt')
+    # Starting stmp server for Outlook and getting login info from user
+    s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
+    s.starttls()
+    MY_ADDRESS = input("Email Address: ")
+    PASSWORD = input("Password: ")
+    s.login(MY_ADDRESS, PASSWORD)
+    # For each person, put their name in the template and fill out the appropiate fields, then send the message
+    for name, email in zip(names, emails):
+        msg = MIMEMultipart()
+        message = message_template.substitute(NAME=name.title())
+        msg['From']=MY_ADDRESS
+        msg['To']=email
+        msg['Subject']="Army Ten Miler Training"
+        msg.attach(MIMEText(message, 'plain'))
+        s.send_message(msg)
+        del msg
+    s.quit()
 
 if __name__ == "__main__":
     main()
