@@ -3,6 +3,7 @@
 # This program will take contacts fed to it via text file, create a SMTP server and send all contacts an email containing their training schedule
 
 import smtplib
+import getpass
 
 from string import Template
 from email.mime.multipart import MIMEMultipart
@@ -40,7 +41,7 @@ def main():
     s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
     s.starttls()
     MY_ADDRESS = input("Email Address: ")
-    PASSWORD = input("Password: ")
+    PASSWORD = getpass.getpass("Password: ")
     s.login(MY_ADDRESS, PASSWORD)
     # For each person, put their name in the template and fill out the appropiate fields, then send the message
     for name, email in zip(names, emails):
