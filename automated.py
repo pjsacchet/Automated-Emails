@@ -5,6 +5,7 @@
 import smtplib
 import getpass
 import xlrd
+import datetime
 
 from string import Template
 from email.mime.multipart import MIMEMultipart
@@ -12,6 +13,55 @@ from email.mime.text import MIMEText
 
 MY_ADDRESS = None
 PASSWORD = None
+# We will start our training on May 15th, I want this program to automatically choose which week to send dependent on how far along in the training we are
+START_DATE = 15
+TRAINING_WEEK = None
+date_time = datetime.datetime.now()
+cur_day = date_time.day
+cur_month = date_time.month
+print(str(cur_day), str(cur_month))
+
+# Attemping to figure out which week we should be using in the excel sheet based on which day it is today
+# PLease note: while this is not the most 'efficent' solution to this problem the reason for it primarily was the formatting in the excel sheets, since we're sending out an entire weeks worth of training
+#   I wanted to make sure all days of the week would be included in our check of the current date
+# First checking for the weeks in May
+if(cur_month == 5):
+    if(cur_day >= 13 and cur_day < 20):
+        TRAINING_WEEK = 1
+    elif(cur_day >= 20 and cur_day < 27):
+        TRAINING_WEEK = 2
+    else:
+        TRAINING_WEEK = 3
+# Then the weeks in June
+elif(cur_month == 6):
+    if(cur_day >= 3 and cur_day < 10):
+        TRAINING_WEEK = 4
+    elif(cur_day >= 10 and cur_day < 17):
+        TRAINING_WEEK = 5
+    elif(cur_day >= 17 and cur_day < 24):
+        TRAINING_WEEK = 6
+    else:
+        TRAINING_WEEK = 7
+# Next up is July
+elif(cur_month == 7):
+    if(cur_day >= 1 and cur_day < 8):
+        TRAINING_WEEK = 8
+    elif(cur_day >= 8 and cur_day < 15):
+        TRAINING_WEEK = 9
+    elif(cur_day >= 15 and cur_day < 22):
+        TRAINING_WEEK = 10
+    elif(cur_day >= 22 and cur_day < 29):
+        TRAINING_WEEK = 11
+    else:
+        TRAINING_WEEK = 12
+# Finally we have August
+else:
+    if(cur_day >= 5 and cur_day < 12):
+        TRAINING_WEEK = 13
+    elif(cur_day >= 12 and cur_day < 19):
+        TRAINING_WEEK = 14
+    else:
+        TRAINING_WEEK = 15
 
 # This function will take in a text file containing all team member names and their respective email addresses
 # @param - filename - Name of the file containing team member names and email addresses
@@ -53,7 +103,7 @@ def main():
     names, emails = get_contacts('teammembers.txt')
     message_template = read_template('messagetemplate.txt')
     # Also grabbing the appropiate data for the current week of training
-    week_mileage = get_run_info(2) # NEED TO CHANGE THIS TO UPDATING VARIABLE
+    week_mileage = get_run_info(TRAINING_WEEK) # NEED TO CHANGE THIS TO UPDATING VARIABLE
     # Starting stmp server for Outlook and getting login info from user
     s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
     s.starttls()
@@ -63,7 +113,7 @@ def main():
     # For each person, put their name in the template and fill out the appropiate fields, then send the message
     for name, email in zip(names, emails):
         msg = MIMEMultipart()
-        # Grab the mileage for each day of the week, along with the week timeframe 
+        # Grab the mileage for each day of the week, along with the week timeframe
         message = message_template.substitute(NAME=name.title(), WEEK=str(week_mileage[0]), MONDAY=str(week_mileage[1]), TUESDAY=str(week_mileage[2]), WEDNESDAY=str(week_mileage[3]), THURSDAY=str(week_mileage[4]),
         FRIDAY=str(week_mileage[5]), SATURDAY=str(week_mileage[6]), SUNDAY=str(week_mileage[7]))
         msg['From']=MY_ADDRESS
