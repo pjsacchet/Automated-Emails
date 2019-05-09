@@ -1,5 +1,15 @@
-Dear ${NAME},
+${NAME},
 
-U r gnarly m8 
+Here's your training for the week! Looks like fun
 
-luv u 
+${WEEK}:
+
+Monday: ${MONDAY} miles
+Tuesday: ${TUESDAY} miles
+Wednesday: ${WEDNESDAY} miles
+Thursday: ${THURSDAY} miles
+Friday: ${FRIDAY} miles
+Saturday: ${SATURDAY} miles
+Sunday: ${SUNDAY} miles
+
+Good luck!

@@ -4,6 +4,7 @@
 
 import smtplib
 import getpass
+import xlrd
 
 from string import Template
 from email.mime.multipart import MIMEMultipart
@@ -33,10 +34,26 @@ def read_template(filename):
         template_file_content = template_file.read()
     return Template(template_file_content)
 
+# Function will take in the week number to grab the correct row containing that week's training data
+# @param - week_num - The number corresponding to that week number in the training, will be used to grab the corresponding row
+# @return - week_mileage - The miles to be run that week
+def get_run_info(week_num):
+    # Grab the location of the file and create a workbook
+    file_loc = "/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx"
+    wb = xlrd.open_workbook(file_loc)
+    # Creating sheet and setting start point at the beginning
+    sheet = wb.sheet_by_index(0)
+    sheet.cell_value(0, 0)
+    # Grab the row number that is passed to the function
+    week_mileage = sheet.row_values(week_num)
+    return week_mileage
+
 def main():
     # Grab the template, names and emails
     names, emails = get_contacts('teammembers.txt')
     message_template = read_template('messagetemplate.txt')
+    # Also grabbing the appropiate data for the current week of training
+    week_mileage = get_run_info(2) # NEED TO CHANGE THIS TO UPDATING VARIABLE
     # Starting stmp server for Outlook and getting login info from user
     s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
     s.starttls()
@@ -46,7 +63,9 @@ def main():
     # For each person, put their name in the template and fill out the appropiate fields, then send the message
     for name, email in zip(names, emails):
         msg = MIMEMultipart()
-        message = message_template.substitute(NAME=name.title())
+        # Grab the mileage for each day of the week, along with the week timeframe 
+        message = message_template.substitute(NAME=name.title(), WEEK=str(week_mileage[0]), MONDAY=str(week_mileage[1]), TUESDAY=str(week_mileage[2]), WEDNESDAY=str(week_mileage[3]), THURSDAY=str(week_mileage[4]),
+        FRIDAY=str(week_mileage[5]), SATURDAY=str(week_mileage[6]), SUNDAY=str(week_mileage[7]))
         msg['From']=MY_ADDRESS
         msg['To']=email
         msg['Subject']="Army Ten Miler Training"
