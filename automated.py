@@ -13,16 +13,27 @@ from email.mime.text import MIMEText
 
 MY_ADDRESS = None
 PASSWORD = None
+# For each team member of mine, each has their own unique excel file mapped to their name
+TEAM_MEMBERS = {"Sacchet":"/home/pjsacchet/Downloads/STEPHENSON - SUMMER TRAINING .xlsx", "Kruegler":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx"}
+
+#"Kruegler":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Conjelko":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Roberts":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Garrison":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Rangwala":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Stephenson":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Mahmoud":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Ulrich":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Eskridge":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx"}
 # We will start our training on May 15th, I want this program to automatically choose which week to send dependent on how far along in the training we are
 START_DATE = 15
 TRAINING_WEEK = None
 date_time = datetime.datetime.now()
 cur_day = date_time.day
 cur_month = date_time.month
-print(str(cur_day), str(cur_month))
 
 # Attemping to figure out which week we should be using in the excel sheet based on which day it is today
-# PLease note: while this is not the most 'efficent' solution to this problem the reason for it primarily was the formatting in the excel sheets, since we're sending out an entire weeks worth of training
+# PLease note: while this is not the most 'efficent' solution to this problem, the reason for it primarily was the formatting in the excel sheets, since we're sending out an entire weeks worth of training
 #   I wanted to make sure all days of the week would be included in our check of the current date
 # First checking for the weeks in May
 if(cur_month == 5):
@@ -86,10 +97,11 @@ def read_template(filename):
 
 # Function will take in the week number to grab the correct row containing that week's training data
 # @param - week_num - The number corresponding to that week number in the training, will be used to grab the corresponding row
+# @param - train_file - The location to file particular to that specific runner
 # @return - week_mileage - The miles to be run that week
-def get_run_info(week_num):
+def get_run_info(week_num, train_file):
     # Grab the location of the file and create a workbook
-    file_loc = "/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx"
+    file_loc = train_file
     wb = xlrd.open_workbook(file_loc)
     # Creating sheet and setting start point at the beginning
     sheet = wb.sheet_by_index(0)
@@ -102,8 +114,6 @@ def main():
     # Grab the template, names and emails
     names, emails = get_contacts('teammembers.txt')
     message_template = read_template('messagetemplate.txt')
-    # Also grabbing the appropiate data for the current week of training
-    week_mileage = get_run_info(TRAINING_WEEK) # NEED TO CHANGE THIS TO UPDATING VARIABLE
     # Starting stmp server for Outlook and getting login info from user
     s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
     s.starttls()
@@ -112,6 +122,11 @@ def main():
     s.login(MY_ADDRESS, PASSWORD)
     # For each person, put their name in the template and fill out the appropiate fields, then send the message
     for name, email in zip(names, emails):
+        # Get that specific runner's info
+        # Search dictionary for the current runner to get their file location
+        print(name)
+        train_file_loc = TEAM_MEMBERS.get(name)
+        week_mileage = get_run_info(TRAINING_WEEK, train_file_loc)
         msg = MIMEMultipart()
         # Grab the mileage for each day of the week, along with the week timeframe
         message = message_template.substitute(NAME=name.title(), WEEK=str(week_mileage[0]), MONDAY=str(week_mileage[1]), TUESDAY=str(week_mileage[2]), WEDNESDAY=str(week_mileage[3]), THURSDAY=str(week_mileage[4]),
