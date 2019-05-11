@@ -7,6 +7,7 @@ import getpass
 import xlrd
 import datetime
 
+
 from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -14,7 +15,8 @@ from email.mime.text import MIMEText
 MY_ADDRESS = None
 PASSWORD = None
 # For each team member of mine, each has their own unique excel file mapped to their name
-TEAM_MEMBERS = {"Sacchet":"/home/pjsacchet/Downloads/STEPHENSON - SUMMER TRAINING .xlsx", "Kruegler":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx"}
+# Switching back and forth between work computers, this is for the Ubuntu subsystem for Windows (so it can be run from the bash shell)
+TEAM_MEMBERS = {"Sacchet":"/mnt/c/Users/Admin/Documents/ProjectFiles/STEPHENSON - SUMMER TRAINING .xlsx", "Kruegler":"/mnt/c/Users/Admin/Documents/ProjectFiles/KRUEGLER - SUMMER TRAINING .xlsx"}
 
 #"Kruegler":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
 #"Conjelko":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
