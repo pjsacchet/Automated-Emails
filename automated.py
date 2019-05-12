@@ -16,7 +16,7 @@ MY_ADDRESS = None
 PASSWORD = None
 # For each team member of mine, each has their own unique excel file mapped to their name
 # Switching back and forth between work computers, this is for the Ubuntu subsystem for Windows (so it can be run from the bash shell)
-TEAM_MEMBERS = {"Sacchet":"/mnt/c/Users/Admin/Documents/ProjectFiles/STEPHENSON - SUMMER TRAINING .xlsx", "Kruegler":"/mnt/c/Users/Admin/Documents/ProjectFiles/KRUEGLER - SUMMER TRAINING .xlsx"}
+TEAM_MEMBERS = {"Sacchet":"~/Projects/STEPHENSON - SUMMER TRAINING .xlsx", "Kruegler":"~/Projects/KRUEGLER - SUMMER TRAINING .xlsx"}
 
 #"Kruegler":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
 #"Conjelko":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
