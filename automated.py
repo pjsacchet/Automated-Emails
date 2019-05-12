@@ -6,6 +6,7 @@ import smtplib
 import getpass
 import xlrd
 import datetime
+import sys
 
 
 from string import Template
@@ -16,17 +17,19 @@ MY_ADDRESS = None
 PASSWORD = None
 # For each team member of mine, each has their own unique excel file mapped to their name
 # Switching back and forth between work computers, this is for the Ubuntu subsystem for Windows (so it can be run from the bash shell)
-TEAM_MEMBERS = {"Sacchet":"~/Projects/STEPHENSON - SUMMER TRAINING .xlsx", "Kruegler":"~/Projects/KRUEGLER - SUMMER TRAINING .xlsx"}
+# Most recent changes will make it so CRON can run it from the directory on my Raspberry Pi
+TEAM_MEMBERS = {
+"Sacchet":"~/Projects/STEPHENSON - SUMMER TRAINING .xlsx"}
+#"Kruegler":"~/Projects/KRUEGLER - SUMMER TRAINING .xlsx",
+#"Conjelko":"~/Projects/",
+#"Roberts":"~/Projects/",
+#"Garrison":"~/Projects/",
+#"Rangwala":"~/Projects/",
+#"Stephenson":"~/Projects/",
+#"Mahmoud":"~/Projects/",
+#"Ulrich":"~/Projects/",
+#"Eskridge":"~/Projects/"}
 
-#"Kruegler":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Conjelko":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Roberts":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Garrison":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Rangwala":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Stephenson":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Mahmoud":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Ulrich":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Eskridge":"/home/pjsacchet/Downloads/KRUEGLER - SUMMER TRAINING .xlsx"}
 # We will start our training on May 15th, I want this program to automatically choose which week to send dependent on how far along in the training we are
 START_DATE = 15
 TRAINING_WEEK = None
@@ -119,8 +122,9 @@ def main():
     # Starting stmp server for Outlook and getting login info from user
     s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
     s.starttls()
-    MY_ADDRESS = input("Email Address: ")
-    PASSWORD = getpass.getpass("Password: ")
+    # We will pass our email and password as command line arguments to CRON on our Raspberry Pi
+    MY_ADDRESS = sys.argv[1]
+    PASSWORD = sys.argv[2]
     s.login(MY_ADDRESS, PASSWORD)
     # For each person, put their name in the template and fill out the appropiate fields, then send the message
     for name, email in zip(names, emails):
