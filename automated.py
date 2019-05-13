@@ -9,7 +9,6 @@ import xlrd
 import datetime
 import sys
 
-
 from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -20,16 +19,16 @@ PASSWORD = None
 # Switching back and forth between work computers, this is for the Ubuntu subsystem for Windows (so it can be run from the bash shell)
 # Most recent changes will make it so CRON can run it from the directory on my Raspberry Pi
 TEAM_MEMBERS = {
-"Sacchet":"~/Projects/STEPHENSON - SUMMER TRAINING .xlsx"}
-#"Kruegler":"~/Projects/KRUEGLER - SUMMER TRAINING .xlsx",
-#"Conjelko":"~/Projects/",
-#"Roberts":"~/Projects/",
-#"Garrison":"~/Projects/",
-#"Rangwala":"~/Projects/",
-#"Stephenson":"~/Projects/",
-#"Mahmoud":"~/Projects/",
-#"Ulrich":"~/Projects/",
-#"Eskridge":"~/Projects/"}
+"Sacchet":"~/Projects/STEPHENSON - SUMMER TRAINING .xlsx",
+"Stephenson":"~/Projects/STEPHENSON - SUMMER TRAINING .xlsx",
+"Kruegler":"~/Projects/KRUEGLER - SUMMER TRAINING .xlsx",
+"Conjelko":"~/Projects/CONJELKO - SUMMER TRAINING .xlsx",
+"Roberts":"~/Projects/ROBERTS - SUMMER TRAINING .xlsx",
+"Garrison":"~/Projects/GARRISON - SUMMER TRAINING .xlsx",
+"Rangwala":"~/Projects/RANGWALA - SUMMER TRAINING .xlsx",
+"Mahmoud":"~/Projects/MAHMOUD - SUMMER TRAINING .xlsx",
+"Ulrich":"~/Projects/ULRICH - SUMMER TRAINING .xlsx",
+"Eskridge":"~/Projects/ESKRIDGE - SUMMER TRAINING .xlsx"}
 
 # We will start our training on May 15th, I want this program to automatically choose which week to send dependent on how far along in the training we are
 START_DATE = 15
